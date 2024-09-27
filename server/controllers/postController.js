@@ -2,18 +2,46 @@ const Post = require('../models/Post');
 const User = require('../models/User');
 
 // Create a new post
+// exports.createPost = async (req, res) => {
+//   try {
+//     const { title, content } = req.body;
+//     const user = req.user.id;
+//     let mediaUrl = req.file ? req.file.path : null;
+
+//     console.log('Creating post with data:', { title, content, user, mediaUrl });
+
+//     const newPost = new Post({ user, title, content, mediaUrl });
+//     const post = await newPost.save();
+    
+//     // Optional: You can update the user's posts list if needed.
+//     await User.findByIdAndUpdate(user, { $push: { posts: post._id } });
+
+//     res.status(201).json(post);
+//   } catch (error) {
+//     console.error('Error creating post:', error.message);
+//     res.status(500).json({ message: 'Error creating post', error: error.message });
+//   }
+// };
+
 exports.createPost = async (req, res) => {
   try {
     const { title, content } = req.body;
     const user = req.user.id;
-    let mediaUrl = req.file ? req.file.path : null;
+
+    let mediaUrl = null;
+
+    if (req.file) {
+      const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+        resource_type: 'auto', 
+      });
+      mediaUrl = uploadResult.secure_url;  // Use the secure URL from Cloudinary
+    }
 
     console.log('Creating post with data:', { title, content, user, mediaUrl });
 
     const newPost = new Post({ user, title, content, mediaUrl });
     const post = await newPost.save();
-    
-    // Optional: You can update the user's posts list if needed.
+
     await User.findByIdAndUpdate(user, { $push: { posts: post._id } });
 
     res.status(201).json(post);
@@ -34,6 +62,30 @@ exports.getPosts = async (req, res) => {
 };
 
 // Update a post by ID
+// exports.updatePost = async (req, res) => {
+//   try {
+//     const postId = req.params.id;
+//     const { title, content } = req.body;
+
+//     let post = await Post.findById(postId);
+//     if (!post) return res.status(404).json({ message: 'Post not found' });
+
+//     // Check if the logged-in user is the owner of the post
+//     if (post.user.toString() !== req.user.id) {
+//       return res.status(403).json({ message: 'Unauthorized' });
+//     }
+
+//     post.title = title || post.title;
+//     post.content = content || post.content;
+//     post = await post.save();
+
+//     res.status(200).json(post);
+//   } catch (error) {
+//     res.status(500).json({ message: 'Error updating post', error });
+//   }
+// };
+
+// Update a post by ID
 exports.updatePost = async (req, res) => {
   try {
     const postId = req.params.id;
@@ -47,8 +99,20 @@ exports.updatePost = async (req, res) => {
       return res.status(403).json({ message: 'Unauthorized' });
     }
 
+    let mediaUrl = post.mediaUrl; // Keep existing media URL unless a new file is uploaded
+
+    if (req.file) {
+      // Upload new file to Cloudinary and replace the mediaUrl
+      const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+        resource_type: 'auto', // Automatically handle image or video
+      });
+      mediaUrl = uploadResult.secure_url;
+    }
+
     post.title = title || post.title;
     post.content = content || post.content;
+    post.mediaUrl = mediaUrl;
+
     post = await post.save();
 
     res.status(200).json(post);
@@ -56,6 +120,7 @@ exports.updatePost = async (req, res) => {
     res.status(500).json({ message: 'Error updating post', error });
   }
 };
+
 
 // Delete a post by ID
 exports.deletePost = async (req, res) => {
