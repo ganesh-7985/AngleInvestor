@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-// import { getProfile, getPosts, getComments } from '../../services/api';
+import axios from 'axios';
 import PostListFounder from '../posts/PostListFounder';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -15,12 +15,21 @@ const FounderDashboard = () => {
       try {
         // const profileRes = await getProfile();
         // setProfile(profileRes.data);
+        const token = localStorage.getItem('token');
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+        const profileRes = await axios.get('http://localhost:5050/api/auth/user', { headers });
+        setProfile(profileRes.data);
 
         // const postsRes = await getPosts();
         // setPosts(Array.isArray(postsRes.data) ? postsRes.data : []);
+        const postsRes = await axios.get('http://localhost:5050/api/posts', { headers });
+        setPosts(Array.isArray(postsRes.data) ? postsRes.data : []);
 
         // const commentsRes = await getComments();
         // setComments(Array.isArray(commentsRes.data) ? commentsRes.data : []);
+        const commentsRes = await axios.get('http://localhost:5050/api/posts/comments', { headers });
+        setComments(Array.isArray(commentsRes.data) ? commentsRes.data : []);
       } catch (error) {
         console.error('Error fetching data:', error);
       }

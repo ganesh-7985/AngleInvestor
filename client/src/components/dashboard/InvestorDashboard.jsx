@@ -84,10 +84,10 @@ const InvestorDashboard = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
+    <div className="flex flex-col md:flex-row min-h-screen bg-gradient-to-br from-purple-100 to-indigo-100">
       {/* Mobile Sidebar Toggle */}
       <button
-        className="md:hidden fixed top-4 left-4 z-50 bg-blue-500 text-white p-2 rounded-full"
+        className="md:hidden fixed top-4 left-4 z-50 bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-2 rounded-full"
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
       >
         {isSidebarOpen ? '✕' : '☰'}
@@ -97,22 +97,22 @@ const InvestorDashboard = () => {
       <AnimatePresence>
         {(isSidebarOpen || window.innerWidth >= 768) && (
           <motion.div
-            className="w-64 bg-white border-r p-4 fixed md:static inset-y-0 left-0 z-30 overflow-y-auto"
+            className="w-64 bg-white border-r border-indigo-200 p-4 fixed md:static inset-y-0 left-0 z-30 overflow-y-auto"
             initial={{ x: '-100%' }}
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           >
-            <h1 className="text-2xl font-bold mb-6">Investor Dashboard</h1>
+            <h1 className="text-2xl font-bold mb-6 text-indigo-800">Investor Dashboard</h1>
             <nav className="space-y-2">
-              <Link to="/" className="block p-2 hover:bg-gray-200 rounded transition duration-200">Home</Link>
-              <Link to="/explore" className="block p-2 hover:bg-gray-200 rounded transition duration-200">Explore</Link>
-              <Link to="/notifications" className="block p-2 hover:bg-gray-200 rounded transition duration-200">Notifications</Link>
-              <Link to="/messages" className="block p-2 hover:bg-gray-200 rounded transition duration-200">Messages</Link>
-              <Link to="/profile" className="block p-2 hover:bg-gray-200 rounded transition duration-200">Profile</Link>
+              <Link to="/" className="block p-2 hover:bg-indigo-100 rounded transition duration-200 text-indigo-600">Home</Link>
+              <Link to="/explore" className="block p-2 hover:bg-indigo-100 rounded transition duration-200 text-indigo-600">Explore</Link>
+              <Link to="/notifications" className="block p-2 hover:bg-indigo-100 rounded transition duration-200 text-indigo-600">Notifications</Link>
+              <Link to="/messages" className="block p-2 hover:bg-indigo-100 rounded transition duration-200 text-indigo-600">Messages</Link>
+              <Link to="/profile" className="block p-2 hover:bg-indigo-100 rounded transition duration-200 text-indigo-600">Profile</Link>
             </nav>
             <motion.button
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-full w-full"
+              className="mt-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded-full w-full hover:from-indigo-600 hover:to-purple-700 transition duration-300"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/createpost')}
@@ -133,18 +133,18 @@ const InvestorDashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-xl font-semibold mb-2">Search Founders</h2>
+            <h2 className="text-xl font-semibold mb-2 text-indigo-800">Search Founders</h2>
             <div className="flex">
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search for founders or projects..."
-                className="flex-grow p-2 border rounded-l"
+                className="flex-grow p-2 border border-indigo-300 rounded-l focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
               <motion.button
                 onClick={handleSearch}
-                className="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600 transition duration-200"
+                className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded-r hover:from-indigo-600 hover:to-purple-700 transition duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -159,7 +159,7 @@ const InvestorDashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <h2 className="text-xl font-semibold mb-4">Founder Posts</h2>
+            <h2 className="text-xl font-semibold mb-4 text-indigo-800">Founder Posts</h2>
             <PostListInvestor
               posts={posts} 
               onLike={handleLike} 
@@ -171,7 +171,7 @@ const InvestorDashboard = () => {
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                 <motion.button
                   key={page}
-                  className={`px-3 py-1 rounded ${currentPage === page ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                  className={`px-3 py-1 rounded ${currentPage === page ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white' : 'bg-white text-indigo-600 border border-indigo-300'}`}
                   onClick={() => fetchPosts(page)}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
@@ -192,10 +192,10 @@ const InvestorDashboard = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
             >
-              <h2 className="text-xl font-semibold mb-2">Profile</h2>
-              <p><strong>Name:</strong> {profile.fullName}</p>
-              <p><strong>Mentorship Fee:</strong> ${profile.mentorshipFee}</p>
-              <Link to="/profile" className="text-blue-500 hover:underline mt-2 inline-block transition duration-200">
+              <h2 className="text-xl font-semibold mb-2 text-indigo-800">Profile</h2>
+              <p className="text-indigo-600"><strong>Name:</strong> {profile.fullName}</p>
+              <p className="text-indigo-600"><strong>Mentorship Fee:</strong> ${profile.mentorshipFee}</p>
+              <Link to="/profile" className="text-indigo-500 hover:text-indigo-600 mt-2 inline-block transition duration-200">
                 Edit Profile
               </Link>
             </motion.div>
@@ -207,28 +207,28 @@ const InvestorDashboard = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <h2 className="text-xl font-semibold mb-4">Active Mentorships</h2>
+            <h2 className="text-xl font-semibold mb-4 text-indigo-800">Active Mentorships</h2>
             {mentorships.length > 0 ? (
               mentorships.map(mentorship => (
                 <motion.div
                   key={mentorship._id}
-                  className="mb-4 bg-gray-50 p-3 rounded shadow-sm"
+                  className="mb-4 bg-indigo-50 p-3 rounded shadow-sm"
                   whileHover={{ scale: 1.03 }}
                   transition={{ type: 'spring', stiffness: 300 }}
                 >
-                  <p><strong>Founder:</strong> {mentorship.founder.fullName}</p>
-                  <p><strong>Company:</strong> {mentorship.founder.companyName}</p>
-                  <p><strong>Start Date:</strong> {new Date(mentorship.startDate).toLocaleDateString()}</p>
+                  <p className="text-indigo-600"><strong>Founder:</strong> {mentorship.founder.fullName}</p>
+                  <p className="text-indigo-600"><strong>Company:</strong> {mentorship.founder.companyName}</p>
+                  <p className="text-indigo-600"><strong>Start Date:</strong> {new Date(mentorship.startDate).toLocaleDateString()}</p>
                   <Link 
                     to={`/chat/${mentorship.chatId}`}
-                    className="text-blue-500 hover:underline mt-1 inline-block transition duration-200"
+                    className="text-indigo-500 hover:text-indigo-600 mt-1 inline-block transition duration-200"
                   >
                     Open Chat
                   </Link>
                 </motion.div>
               ))
             ) : (
-              <p>No active mentorships found.</p>
+              <p className="text-indigo-600">No active mentorships found.</p>
             )}
           </motion.div>
 
@@ -238,12 +238,12 @@ const InvestorDashboard = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
+            <h2 className="text-xl font-semibold mb-4 text-indigo-800">Quick Actions</h2>
             <div className="flex flex-col space-y-2">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link 
                   to="/chat" 
-                  className="bg-green-500 text-white px-4 py-2 rounded text-center block hover:bg-green-600 transition duration-200"
+                  className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded text-center block hover:from-indigo-600 hover:to-purple-700 transition duration-300"
                 >
                   Messages
                 </Link>
@@ -251,7 +251,7 @@ const InvestorDashboard = () => {
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                 <Link 
                   to="/videocall" 
-                  className="bg-purple-500 text-white px-4 py-2 rounded text-center block hover:bg-purple-600 transition duration-200"
+                  className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded text-center block hover:from-indigo-600 hover:to-purple-700 transition duration-300"
                 >
                   Start Video Call
                 </Link>

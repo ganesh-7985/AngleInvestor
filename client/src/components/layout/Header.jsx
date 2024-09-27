@@ -6,25 +6,42 @@ const Header = () => {
   const { user, logout } = useAuth();
 
   return (
-    <header className="bg-blue-600 text-white p-4">
+    <header className="bg-gradient-to-r from-indigo-800 to-purple-600 p-4">
       <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold">Investr</Link>
+        <Link to="/" className="text-3xl font-bold text-white">
+          Investr
+        </Link>
         <nav>
           {user ? (
-            <>
-              {/* <Link to="/dashboard" className="mr-4">Dashboard</Link> */}
-              <Link to="/profile" className="mr-4">Profile</Link>
-              <button onClick={logout} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+            <div className="space-x-4">
+              <Link to="/dashboard" className="text-white hover:text-indigo-200 transition duration-300">
+                Dashboard
+              </Link>
+              <Link to="/profile" className="text-white hover:text-indigo-200 transition duration-300">
+                Profile
+              </Link>
+              <button
+                onClick={logout}
+                className="px-4 py-2 bg-white text-indigo-600 font-semibold rounded-full hover:bg-indigo-100 transition duration-300"
+              >
                 Logout
               </button>
-            </>
+            </div>
           ) : (
-            <>
-              <Link to="/login" className="mr-4">Login</Link>
-              <Link to="/signup" className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            <div className="space-x-4">
+              <Link
+                to="/login"
+                className="text-white hover:text-indigo-200 transition duration-300"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="px-4 py-2 bg-white text-indigo-600 font-semibold rounded-full hover:bg-indigo-100 transition duration-300"
+              >
                 Sign Up
               </Link>
-            </>
+            </div>
           )}
         </nav>
       </div>
