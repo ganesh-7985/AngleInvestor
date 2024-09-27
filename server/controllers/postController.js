@@ -1,5 +1,6 @@
 const Post = require('../models/Post');
 const User = require('../models/User');
+const cloudinary = require("../utils/cloudinary")
 
 // Create a new post
 // exports.createPost = async (req, res) => {
@@ -24,30 +25,50 @@ const User = require('../models/User');
 // };
 
 exports.createPost = async (req, res) => {
+  const { title, content, userId } = req.body;
+
+  if (!req.file) {
+    return res.status(400).json({
+      error: "An image or video file is required"
+    });
+  }
+
+  const filePath = req.file.path; // Path to the uploaded file (could be image or video)
+  const fileType = req.file.mimetype.split('/')[0]; // Determine if it's image or video
+  const user = await User.findById(userId);
+  if (!user) return res.status(404).json({ message: "User not found" });
+
+  let mediaUrl = "";
+
   try {
-    const { title, content } = req.body;
-    const user = req.user.id;
+    // Upload the file to Cloudinary with resource_type based on file type
+    const uploadResult = await cloudinary.uploader.upload(filePath, {
+      resource_type: fileType === 'image' ? 'image' : 'video'
+    });
 
-    let mediaUrl = null;
+    mediaUrl = uploadResult.secure_url; // Get the Cloudinary URL
 
-    if (req.file) {
-      const uploadResult = await cloudinary.uploader.upload(req.file.path, {
-        resource_type: 'auto', 
-      });
-      mediaUrl = uploadResult.secure_url;  // Use the secure URL from Cloudinary
-    }
+    // Create a new post in the database
+    const newPost = new Post({
+      user: userId,
+      title,
+      content,
+      mediaUrl, // Save the Cloudinary URL to the post
+    });
 
-    console.log('Creating post with data:', { title, content, user, mediaUrl });
+    await newPost.save();
 
-    const newPost = new Post({ user, title, content, mediaUrl });
-    const post = await newPost.save();
+    // Update the user's posts list
+    user.posts.push(newPost._id);
+    await user.save();
 
-    await User.findByIdAndUpdate(user, { $push: { posts: post._id } });
-
-    res.status(201).json(post);
+    res.status(201).json({
+      message: "Post created successfully",
+      post: newPost,
+    });
   } catch (error) {
-    console.error('Error creating post:', error.message);
-    res.status(500).json({ message: 'Error creating post', error: error.message });
+    console.error("Error uploading file (this is the catch block):", error);
+    res.status(500).json({ message: "Error uploading file", error: error.message });
   }
 };
 

@@ -15,6 +15,7 @@ const CreatePost = () => {
     }
 // 
     try {
+      console.log("The form data that is given to createPost is: ", formData);
       await createPost(formData);
       // Handle successful post creation (e.g., show success message, redirect)
     } catch (error) {
