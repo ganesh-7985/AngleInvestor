@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getProfile, getPosts, getComments } from '../../services/api';
+// import { getProfile, getPosts, getComments } from '../../services/api';
 import PostListFounder from '../posts/PostListFounder';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -13,14 +13,14 @@ const FounderDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const profileRes = await getProfile();
-        setProfile(profileRes.data);
+        // const profileRes = await getProfile();
+        // setProfile(profileRes.data);
 
-        const postsRes = await getPosts();
-        setPosts(Array.isArray(postsRes.data) ? postsRes.data : []);
+        // const postsRes = await getPosts();
+        // setPosts(Array.isArray(postsRes.data) ? postsRes.data : []);
 
-        const commentsRes = await getComments();
-        setComments(Array.isArray(commentsRes.data) ? commentsRes.data : []);
+        // const commentsRes = await getComments();
+        // setComments(Array.isArray(commentsRes.data) ? commentsRes.data : []);
       } catch (error) {
         console.error('Error fetching data:', error);
       }

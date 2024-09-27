@@ -1,6 +1,7 @@
 const Post = require('../models/Post');
 const User = require('../models/User');
 const cloudinary = require("../utils/cloudinary")
+const { v4: uuidv4 } = require('uuid');  // UUID for unique identifier
 
 // Create a new post
 // exports.createPost = async (req, res) => {
@@ -25,50 +26,59 @@ const cloudinary = require("../utils/cloudinary")
 // };
 
 exports.createPost = async (req, res) => {
-  const { title, content, userId } = req.body;
-
-  if (!req.file) {
-    return res.status(400).json({
-      error: "An image or video file is required"
-    });
-  }
-
-  const filePath = req.file.path; // Path to the uploaded file (could be image or video)
-  const fileType = req.file.mimetype.split('/')[0]; // Determine if it's image or video
-  const user = await User.findById(userId);
-  if (!user) return res.status(404).json({ message: "User not found" });
-
-  let mediaUrl = "";
-
   try {
-    // Upload the file to Cloudinary with resource_type based on file type
+    const { title, content } = req.body;
+    // const userId = req.user.id;
+
+    console.log("The Request.file Object recieved is: ", req.file);
+
+    if (!req.file) {
+      return res.status(400).json({ error: "An image or video file is required" });
+    }
+
+    // Extract file path and type (image or video)
+    const filePath = req.file.path;
+    const publicId = `post_${uuidv4()}`;
+
+    // const fileType = req.file.mimetype.split('/')[0]; // image or video
+
+    // const filePathTemp = req.files['media'].path;
+    // console.log("filePathTemp is: ", filePathTemp);
+
+    // // Upload file to Cloudinary
+
+
+
     const uploadResult = await cloudinary.uploader.upload(filePath, {
-      resource_type: fileType === 'image' ? 'image' : 'video'
+      public_id: publicId,
+      resource_type: 'auto', // This handles both image and video
     });
 
-    mediaUrl = uploadResult.secure_url; // Get the Cloudinary URL
+    const mediaUrl = uploadResult.secure_url; // Cloudinary URL for the media
 
-    // Create a new post in the database
+    console.log("uploadResult is: ", uploadResult);
+    console.log("mediaUrl is: ", mediaUrl);
+
+    // Create a new post with media URL
     const newPost = new Post({
-      user: userId,
       title,
       content,
-      mediaUrl, // Save the Cloudinary URL to the post
+      mediaUrl, // Cloudinary URL is saved here
     });
 
     await newPost.save();
 
-    // Update the user's posts list
-    user.posts.push(newPost._id);
-    await user.save();
+    // Update user's post list (optional)
+    // user.posts.push(newPost._id);
+    // await user.save();
 
     res.status(201).json({
       message: "Post created successfully",
-      post: newPost,
+      // post: newPost,
     });
   } catch (error) {
-    console.error("Error uploading file (this is the catch block):", error);
-    res.status(500).json({ message: "Error uploading file", error: error.message });
+    console.error("Error creating post:", error);
+    res.status(500).json({ message: "Error creating post", error: error.message });
   }
 };
 
