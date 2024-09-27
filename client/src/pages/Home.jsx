@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Users, MapPin, BellOff, MessageSquare, UserCircle, Lock, Menu } from 'lucide-react';
 import { useState } from 'react';
 import logo from '../assets/handshake.png';
-import HowItWorksPage from './sub_pages/HowItWorks';
+
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -43,11 +43,10 @@ const HomePage = () => {
           <motion.div 
             className={`${isMenuOpen ? 'block' : 'hidden'} md:flex  md:space-y-0 md:space-x-6  md:flex-row absolute md:relative bg-white md:bg-transparent w-full md:w-auto shadow-md md:shadow-none`}
           >
-            <Link to="/" className="text-indigo-600 hover:text-indigo-800 transition-colors duration-300">Home</Link>
-            <Link to="/why-investr" className="text-indigo-600 hover:text-indigo-800 transition-colors duration-300">Why Investr</Link>
-            <Link to="/features" className="text-indigo-600 hover:text-indigo-800 transition-colors duration-300">Features</Link>
-            <Link to="/howitworks"  className="text-indigo-600 hover:text-indigo-800 transition-colors duration-300">How It Works</Link>
-            <Link to="/signup" className="bg-indigo-500 text-white px-4 py-1 rounded-md hover:bg-indigo-600 transition-colors duration-300">Sign Up</Link>
+            
+            <Link to="/signup" className="bg-indigo-500 text-white px-4 py-1 rounded-md hover:bg-indigo-600 transition-colors duration-300">SignUp</Link>
+            <Link to="/login" className="bg-indigo-500 text-white px-4 py-1 rounded-md hover:bg-indigo-600 transition-colors duration-300">LogIn</Link>
+            
           </motion.div>
         </nav>
       </header>
