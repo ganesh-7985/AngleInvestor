@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
       if (token) {
         try {
           const res = await axios.get('http://localhost:5050/api/auth/user', {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: { Authorization: `Bearer ${token}` },
           });
           setUser(res.data);
         } catch (error) {

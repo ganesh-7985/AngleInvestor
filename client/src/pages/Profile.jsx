@@ -7,8 +7,13 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchProfile = async () => {
+      const token = localStorage.getItem('token');
       try {
-        const res = await axios.get('/api/auth/user');
+        const res = await axios.get('http://localhost:5050/api/auth/user', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setProfile(res.data);
       } catch (error) {
         console.error('Error fetching profile:', error);
@@ -19,8 +24,13 @@ const Profile = () => {
 
   const handleEdit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem('token');
     try {
-      const res = await axios.put('http://localhost:5050/api/auth/user', profile);
+      const res = await axios.put('http://localhost:5050/api/auth/user', profile, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setProfile(res.data);
       setEditing(false);
     } catch (error) {

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { createPost } from '../../services/api';
+import axios from 'axios';
 
 const CreatePost = () => {
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit } = useForm();
   const [file, setFile] = useState(null);
 
   const onSubmit = async (data) => {
@@ -13,9 +13,14 @@ const CreatePost = () => {
     if (file) {
       formData.append('media', file);
     }
-// 
+
     try {
-      await createPost(formData);
+      const token = localStorage.getItem('token');
+      await axios.post('http://localhost:5050/api/posts', formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       // Handle successful post creation (e.g., show success message, redirect)
     } catch (error) {
       console.error('Error creating post:', error);
