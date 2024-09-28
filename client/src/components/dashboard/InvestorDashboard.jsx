@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import PostListInvestor from '../posts/PostListInvestor';
 import { useAuth } from '../../hooks/useAuth';
-// import { getPosts, getProfile, getMentors, purchaseMentorship, likePost, commentOnPost } from '../../services/api';
+import { getPosts, getProfile, getMentors, purchaseMentorship, likePost, commentOnPost } from '../../services/api';
 
 const InvestorDashboard = () => {
   const [profile, setProfile] = useState(null);
@@ -16,8 +16,6 @@ const InvestorDashboard = () => {
   const { user } = useAuth();
 
   const postsPerPage = 5;
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -115,7 +113,6 @@ const InvestorDashboard = () => {
               className="mt-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-4 py-2 rounded-full w-full hover:from-indigo-600 hover:to-purple-700 transition duration-300"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => navigate('/createpost')}
             >
               New Post
             </motion.button>

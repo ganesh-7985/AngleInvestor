@@ -1,11 +1,10 @@
 const express = require('express');
 const postController = require('../controllers/postController');
 const authMiddleware = require('../middlewares/authMiddleware');
-// const upload = require('../middlewares/uploadMiddleware');
-const upload = require("../middlewares/multerMiddleware")
+const upload = require('../middlewares/uploadMiddleware');
 const router = express.Router();
 
-router.post('/upload', upload.single('media'), postController.createPost);
+router.post('/', upload.single('media'), postController.createPost);
 router.get('/', postController.getPosts);
 router.put('/:id',  postController.updatePost);
 router.delete('/:id', postController.deletePost);

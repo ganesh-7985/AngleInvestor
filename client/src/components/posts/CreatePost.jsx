@@ -14,17 +14,17 @@ const CreatePost = () => {
       formData.append('media', file);
     }
 
-    // main content
+    try {
       const token = localStorage.getItem('token');
-      console.log("The token is: ", token);
-      await axios.post('http://localhost:5050/api/posts/upload', formData, {
+      await axios.post('http://localhost:5050/api/posts', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data'
-           
         },
       });
       // Handle successful post creation (e.g., show success message, redirect)
+    } catch (error) {
+      console.error('Error creating post:', error);
+    }
   };
 
   return (
