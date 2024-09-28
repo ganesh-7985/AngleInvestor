@@ -1,6 +1,7 @@
 const Post = require('../models/Post');
 const User = require('../models/User');
 const cloudinary = require("../utils/cloudinary")
+const { v4: uuidv4 } = require('uuid');  // UUID for unique identifier
 
 // Create a new post
 // exports.createPost = async (req, res) => {
@@ -25,52 +26,49 @@ const cloudinary = require("../utils/cloudinary")
 // };
 
 exports.createPost = async (req, res) => {
-  const { title, content, userId } = req.body;
-
-  if (!req.file) {
-    return res.status(400).json({
-      error: "An image or video file is required"
-    });
-  }
-
-  const filePath = req.file.path; // Path to the uploaded file (could be image or video)
-  const fileType = req.file.mimetype.split('/')[0]; // Determine if it's image or video
-  const user = await User.findById(userId);
-  if (!user) return res.status(404).json({ message: "User not found" });
-
-  let mediaUrl = "";
-
   try {
-    // Upload the file to Cloudinary with resource_type based on file type
-    const uploadResult = await cloudinary.uploader.upload(filePath, {
-      resource_type: fileType === 'image' ? 'image' : 'video'
-    });
+    const { title, content } = req.body;
 
-    mediaUrl = uploadResult.secure_url; // Get the Cloudinary URL
+    if (!req.file) {
+      return res.status(400).json({ error: "An image or video file is required" });
+    }
 
-    // Create a new post in the database
-    const newPost = new Post({
-      user: userId,
+    const filePath = req.file.path;
+    const publicId = `post_${uuidv4()}`;
+
+    let uploadResult;
+
+    try {
+      // Try uploading the file to Cloudinary
+      uploadResult = await cloudinary.uploader.upload(filePath, {
+        public_id: publicId,
+        resource_type: 'auto',  // Automatically detect file type
+      });
+    } catch (cloudinaryError) {
+      console.error("Cloudinary upload error:", cloudinaryError.message);
+      return res.status(500).json({ error: "Error uploading file to Cloudinary", details: cloudinaryError.message });
+    }
+
+    const mediaUrl = uploadResult.secure_url;
+    console.log("Cloudinary upload successful:", mediaUrl);
+
+    // Alternative method: use Post.create() to create and save in one step
+    const newPost = await Post.create({
       title,
       content,
-      mediaUrl, // Save the Cloudinary URL to the post
+      mediaUrl
     });
-
-    await newPost.save();
-
-    // Update the user's posts list
-    user.posts.push(newPost._id);
-    await user.save();
 
     res.status(201).json({
       message: "Post created successfully",
       post: newPost,
     });
   } catch (error) {
-    console.error("Error uploading file (this is the catch block):", error);
-    res.status(500).json({ message: "Error uploading file", error: error.message });
+    console.error("Error creating post:", error.message);
+    res.status(500).json({ message: "Error creating post", error: error.message });
   }
 };
+
 
 // Get all posts with user details
 exports.getPosts = async (req, res) => {

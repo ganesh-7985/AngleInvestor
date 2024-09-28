@@ -11,15 +11,5 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Set up Cloudinary storage for multer
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'posts_media',  // Folder where media files will be stored
-    resource_type: 'auto',  // Auto detects if file is an image or video
-  },
-});
 
-const upload = multer({ storage });
-
-module.exports = upload;
+module.exports = cloudinary;
