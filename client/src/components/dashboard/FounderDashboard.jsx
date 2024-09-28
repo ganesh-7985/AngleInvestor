@@ -51,7 +51,7 @@ const FounderDashboard = () => {
         <div className="bg-white rounded-lg shadow-md p-6 md:col-span-2">
           <h2 className="text-2xl font-semibold text-indigo-700 mb-4">Your Posts</h2>
           <PostListFounder posts={posts} />
-          <Link to="/create-post" className="inline-block mt-4 px-6 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-full hover:from-indigo-600 hover:to-purple-700 transition duration-300">
+          <Link to="/createpost" className="inline-block mt-4 px-6 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-full hover:from-indigo-600 hover:to-purple-700 transition duration-300">
             Create New Post
           </Link>
         </div>
@@ -77,10 +77,10 @@ const FounderDashboard = () => {
             <Link to="/messages" className="block w-full py-2 px-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-full text-center hover:from-indigo-600 hover:to-purple-700 transition duration-300">
               Messages
             </Link>
-            <Link to="/video-call" className="block w-full py-2 px-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-full text-center hover:from-indigo-600 hover:to-purple-700 transition duration-300">
+            <Link to="/videocall" className="block w-full py-2 px-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-full text-center hover:from-indigo-600 hover:to-purple-700 transition duration-300">
               Start Video Call
             </Link>
-            <Link to="/find-mentors" className="block w-full py-2 px-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-full text-center hover:from-indigo-600 hover:to-purple-700 transition duration-300">
+            <Link to="/findmentors" className="block w-full py-2 px-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-full text-center hover:from-indigo-600 hover:to-purple-700 transition duration-300">
               Find Mentors
             </Link>
           </div>
